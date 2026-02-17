@@ -7,23 +7,24 @@
 
 import UIKit
 
-enum LikeState {
-    case on
-    case off
-    
-    var imageName: String {
-        switch self {
-        case .on: return "like_button_on"
-        case .off: return "like_button_off"
-        }
-    }
-}
-
 class ImagesListViewController: UIViewController {
-
+    
+    // MARK: - IBOutlets
+    
     @IBOutlet private var tableView: UITableView!
     
+    // MARK: - Properties
+    
     private let photosName: [String] = Array(0..<20).map{ "\($0)" }
+    
+    private lazy var dateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .long
+        formatter.timeStyle = .none
+        return formatter
+    }()
+    
+    // MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,6 +32,8 @@ class ImagesListViewController: UIViewController {
         tableView.rowHeight = 200
         tableView.contentInset = UIEdgeInsets(top: 12, left: 0, bottom: 12, right: 0)
     }
+    
+    // MARK: - Private Methods
     
     func configCell(for cell: ImagesListCell, with indexPath: IndexPath) {
         let imageName = photosName[indexPath.row]
@@ -45,15 +48,12 @@ class ImagesListViewController: UIViewController {
         cell.likeButton.setBackgroundImage(UIImage(named: cell.likeState.imageName), for: .normal)
     }
     
-    private lazy var dateFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .long
-        formatter.timeStyle = .none
-        return formatter
-    }()
 }
 
+// MARK: - UITableViewDelegate
+
 extension ImagesListViewController: UITableViewDelegate {
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
     }
@@ -74,9 +74,13 @@ extension ImagesListViewController: UITableViewDelegate {
         
         return imageHeight + padding
     }
+    
 }
 
+// MARK: - UITableViewDataSource
+
 extension ImagesListViewController: UITableViewDataSource {
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return photosName.count
     }
