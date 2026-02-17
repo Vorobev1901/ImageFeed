@@ -15,6 +15,4 @@ final class ImagesListCell: UITableViewCell {
     @IBOutlet weak var likeButton: UIButton!
     
     var likeState: LikeState = .off
-    
-    
 }
