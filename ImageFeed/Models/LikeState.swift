@@ -7,14 +7,11 @@
 
 import Foundation
 
-enum LikeState {
-    case on
-    case off
+enum LikeState: String {
+    case on = "like_button_on"
+    case off = "like_button_off"
     
     var imageName: String {
-        switch self {
-        case .on: return "like_button_on"
-        case .off: return "like_button_off"
-        }
+        rawValue
     }
 }

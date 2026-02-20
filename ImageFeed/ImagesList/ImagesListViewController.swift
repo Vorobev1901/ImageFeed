@@ -7,13 +7,18 @@
 
 import UIKit
 
-class ImagesListViewController: UIViewController {
+final class ImagesListViewController: UIViewController {
     
     // MARK: - IBOutlets
     
     @IBOutlet private var tableView: UITableView!
     
     // MARK: - Properties
+    
+    private enum Constants {
+        static let rowHeight: CGFloat = 200
+        static let verticalInset: CGFloat = 12
+    }
     
     private let photosName: [String] = Array(0..<20).map{ "\($0)" }
     
@@ -28,14 +33,22 @@ class ImagesListViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        tableView.rowHeight = 200
-        tableView.contentInset = UIEdgeInsets(top: 12, left: 0, bottom: 12, right: 0)
+        configureTableView()
+    }
+    
+    private func configureTableView() {
+        tableView.rowHeight = Constants.rowHeight
+        tableView.contentInset = UIEdgeInsets(
+            top: Constants.verticalInset,
+            left: 0,
+            bottom: Constants.verticalInset,
+            right: 0
+        )
     }
     
     // MARK: - Private Methods
     
-    func configCell(for cell: ImagesListCell, with indexPath: IndexPath) {
+    private func configCell(for cell: ImagesListCell, with indexPath: IndexPath) {
         let imageName = photosName[indexPath.row]
         
         guard let image = UIImage(named: imageName) else {
@@ -55,24 +68,29 @@ class ImagesListViewController: UIViewController {
 extension ImagesListViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
+        // TODO: Handle cell selection
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         let imageName = photosName[indexPath.row]
         
         guard let image = UIImage(named: imageName) else {
-            return 200
+            return Constants.rowHeight
         }
         
         let imageViewWidth = tableView.bounds.width
+        let imageWidth = image.size.width
         
-        let imageHeight = image.size.height * imageViewWidth / image.size.width
+        guard imageWidth != 0 else {
+            return 0
+        }
+        
+        let imageHeight = image.size.height * imageViewWidth / imageWidth
         
         // Добавляем padding сверху и снизу
-        let padding: CGFloat = 12 + 12
+        let totalPadding: CGFloat = Constants.verticalInset * 2
         
-        return imageHeight + padding
+        return imageHeight + totalPadding
     }
     
 }
